@@ -1,0 +1,16 @@
+[package]
+name = "noomer"
+version = "0.1.0"
+edition = "2024"
+description = "Niri-specific zooming/presenting tool"
+repository = "https://github.com/tulilirockz/noomer"
+readme = "README.md"
+license = "AGPL-3.0-only"
+keywords = ["sdl", "wayland"]
+categories = ["games", "development-tool", "graphics"]
+
+
+[dependencies]
+niri-ipc = { git = "https://github.com/yalter/niri.git" }
+sdl3 = { version = "0", features = ["image"] }
+
