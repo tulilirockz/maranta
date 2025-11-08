@@ -2,7 +2,7 @@
 name = "maranta"
 version = "0.1.0"
 edition = "2024"
-description = "Niri-specific zooming/presenting tool"
+description = "Ephemeral zooming/presenting tool"
 repository = "https://github.com/tulilirockz/maranta"
 readme = "README.md"
 license = "AGPL-3.0-only"
