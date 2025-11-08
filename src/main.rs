@@ -2,9 +2,43 @@ use niri_ipc::Action::ScreenshotScreen;
 use sdl3::event::Event;
 use sdl3::image::LoadTexture;
 use sdl3::render::FRect;
+use std::collections::HashMap;
+use zbus::zvariant::OwnedObjectPath;
+use zbus::zvariant::Value;
+use zbus::{Connection, proxy};
 
 const MOVEMENT_SPEED: f32 = 0.5;
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+#[proxy(
+    default_service = "org.freedesktop.portal.Desktop",
+    default_path = "/org/freedesktop/portal/desktop",
+    interface = "org.freedesktop.portal.Screenshot"
+)]
+trait ScreenshotPortal {
+    async fn screenshot(
+        &self,
+        parent_window: &str,
+        options: HashMap<String, Value<'static>>,
+    ) -> zbus::Result<OwnedObjectPath>;
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let connection = zbus::Connection::session().await?;
+    // busctl --user call org.freedesktop.portal.Desktop /org/freedesktop/portal/desktop org.freedesktop.portal.Screenshot Screenshot sa{sv} '' 2 handle_token s portal1894239812 interactive b false
+
+    let proxy = ScreenshotPortalProxy::new(&connection).await?;
+    let mut options: HashMap<String, Value<'static>> = HashMap::new();
+    options.insert(
+        "handle_token".to_string(),
+        Value::from("portal1894239812".to_string()),
+    );
+    options.insert("interactive".to_string(), Value::from(false));
+    let return_skibidi = proxy.screenshot("", options).await?;
+    println!("{return_skibidi}");
+
+    // busctl --user wait :1.28 /org/freedesktop/portal/desktop/request/1_715/portal1894239812 org.freedesktop.portal.Request Response
+
     let mut tempdir = std::env::temp_dir();
     tempdir.push("whatever");
 
