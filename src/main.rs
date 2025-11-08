@@ -3,7 +3,7 @@ use sdl3::event::Event;
 use sdl3::image::LoadTexture;
 use sdl3::render::FRect;
 
-const MOVEMENT_SPEED: f32 = 2.0;
+const MOVEMENT_SPEED: f32 = 0.5;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut tempdir = std::env::temp_dir();
     tempdir.push("whatever");
@@ -118,10 +118,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // Also ensure that it follows the aspect ratio of the screen
         let x = wheel
             * (offset_x_movement * MOVEMENT_SPEED
-                - ((texture_width as f32 / 2.0) - offset_x_movement * x_aspect));
+                - ((texture_width as f32 / 2.0)
+                    - (offset_x_movement / (2.0 * x_aspect)) * x_aspect));
         let y = wheel
             * (offset_y_movement * MOVEMENT_SPEED
-                - ((texture_height as f32 / 2.0) - offset_y_movement * 1.0));
+                - ((texture_height as f32 / 2.0) - (offset_y_movement / 2.0) * 1.0));
 
         let dst_rect = FRect::new(x, y, width, height);
 
