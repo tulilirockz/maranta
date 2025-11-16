@@ -11,7 +11,7 @@ categories = ["games", "development-tool", "graphics"]
 
 
 [dependencies]
-niri-ipc = { git = "https://github.com/yalter/niri.git" }
+ashpd = "0.12.0"
 sdl3 = { version = "0", features = ["image"] }
 tokio = { version = "1.48.0", features = ["full"] }
 zbus = { version = "5.12.0", features = ["tokio"] }
