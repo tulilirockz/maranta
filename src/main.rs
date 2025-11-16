@@ -1,5 +1,6 @@
 use sdl3::event::Event;
 use sdl3::image::LoadTexture;
+use sdl3::keyboard::Keycode;
 use sdl3::render::FRect;
 // use std::collections::HashMap;
 
@@ -60,7 +61,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut wheel = 0.0;
     let mut offset_x_movement = 0.0;
     let mut offset_y_movement = 0.0;
-    // let mut holding_mouse = false;
 
     loop {
         for event in event_pump.poll_iter() {
@@ -71,20 +71,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             if let Event::MouseWheel { y, .. } = event {
                 if y >= 0.0 {
-                    wheel += 0.05;
-                } else if (wheel - 0.05) > 0.0 {
-                    wheel -= 0.05;
+                    wheel += 0.10;
+                } else if (wheel - 0.15) > 0.0 {
+                    wheel -= 0.15;
                 } else {
                     wheel = 0.0;
                 }
             }
 
-            // if let Event::MouseButtonUp { .. } = event {
-            //     holding_mouse = false;
-            // }
-            // if let Event::MouseButtonDown { .. } = event {
-            //     holding_mouse = true;
-            // }
+            if let Event::KeyDown { keycode, .. } = event {
+                if let Some(keypress) = keycode {
+                    match keypress {
+                        Keycode::Return | Keycode::Backspace | Keycode::Escape => wheel = 0.0,
+                        _ => {}
+                    }
+                }
+            }
 
             if let Event::Quit { .. } = event {
                 return Ok(());
